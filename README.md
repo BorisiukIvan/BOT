@@ -3,8 +3,11 @@ This is code of my engine & interface, but you can use your engine, if you want.
 Note that this will work only on Lichess and Lichess clones. There's list of some Lichess clones, that support Bot:
 1. https://lichess.org - Lichess, supports chess and some chess variants;
 2. https://playstarategy.org - Lichess clone that supports much more variants;
-3. https://lidraughts.org - Lichess for draughts;
-4. https://lishogi.org - Lichess for shogi.
+3. https://lichess.dev - Empty Lichess preview website;
+4. https://lidraughts.org* - Lichess for draughts;
+5. https://lishogi.org* - Lichess for shogi;
+
+*) This website does not support chess, so you need to use your own engine if you want your bot to play on this website too.
 
 # About
 
