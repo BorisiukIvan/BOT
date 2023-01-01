@@ -1,20 +1,32 @@
+# This bot will work with lichess forks, with supports chess only (lichess.org, playstrategy.org, lichess.dev etc.)
+
 import time, random, requests, json
 import antihackers_engine
 
+# Setting website, where your bot will play
+site = 'https://playstrategy.org';
+
+# Switch accept_const to 0, if you want to prevent bot to accept challenges
+accept_const = 1
+
+# You must enter api token below (generate one at https://your-clone.org/account/ouath/token). Note that you must upgrate your account to bot before using his token!
+api = "Bearer YourToken"
+
+# Setting all variables..
 antihackers_engine.calls = 0
-myfile = open('playstatus', 'r')
-accept_const = myfile.read()
-myfile.close()
 antihackers_engine.move = 0
 antihackers_engine.testMove = 0
-api = "Bearer ZTOUtQCYfJdkCgif"
 k = 0
 c2 = 0
+
+# Variants, that your bot can play. Set it to ['Chess'] if you aren't playing on playstrategy.org
 allowed = ['Chess', 'NoC']
+
+# Looking up for a challenge..
 while 1:
  try:
   r = requests.get(
-    "https://playstrategy.org/api/stream/event",
+    site + "/api/stream/event",
     headers = {"Authorization" : api},
     stream = True
   )
@@ -46,7 +58,7 @@ while 1:
                 allowed.index(variant)
             except:
                 r = requests.post(
-                     "https://playstrategy.org/api/challenge/"+chlId+"/decline",
+                     site + "/api/challenge/"+chlId+"/decline",
                      headers = {"Authorization" : api},
                      json = {"reason" : "variant"}
                 )
@@ -61,17 +73,19 @@ while 1:
                 break
             else:
                  r = requests.post(
-                   "https://playstrategy.org/api/challenge/"+chlId+"/decline",
+                   site + "/api/challenge/"+chlId+"/decline",
                    headers = {"Authorization" : api},
                    json = {"reason" : "variant"}
                  )
  except:
     time.sleep(60)
     continue
+    
+ # Starting a game..
  startPosition = antihackers_engine.FENtranslate2("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
  antihackers_engine.a = startPosition.copy()
  antihackers_engine.rightMovesArray = []
- link = "https://playstrategy.org/api/challenge/"+chlId+"/accept"
+ link = site + "/api/challenge/"+chlId+"/accept"
  r = requests.post(
     link,
     headers = {"Authorization" : api}
@@ -79,7 +93,7 @@ while 1:
  gameId = chlId
  #print("OK")
  r = requests.get(
-    "https://playstrategy.org/api/bot/game/stream/"+gameId,
+     site + "/api/bot/game/stream/"+gameId,
      stream = True,
      headers = {"Authorization" : api}
  )
@@ -87,10 +101,14 @@ while 1:
  antihackers_engine.append_to_jornal("Antihackers_Botik playing game " + gameId + "..")
  skip = 0
  if (our_color) and (not k): skip = 1
+  
+ # Playing a game
  for i in r.iter_lines():
     if (i):
        if ( json.loads(i.decode('utf-8')).get("type") == "chatLine" ): continue
        print(json.loads(i.decode('utf-8')))
+       
+       # Loading position
        if (skip):
            skip = 0
            continue
@@ -108,11 +126,12 @@ while 1:
                 antihackers_engine.move = antihackers_engine.move + 1
                 #print(i, move)
        antihackers_engine.show_board(antihackers_engine.a)
+       
+       # Getting best move
        our_move = antihackers_engine.FENtranslate(antihackers_engine.a, 1)
-       #print("OK_AY")
-       #print(our_move)
-#       if (not our_move): break
-       link = "https://playstrategy.org/api/bot/game/"+gameId+"/move/"+str(our_move)
+       
+       # Sending our move to server
+       link = site + "/api/bot/game/"+gameId+"/move/"+str(our_move)
        print("We want to move "+ str(our_move) + "..")
        r = requests.post(
             link,
@@ -125,14 +144,11 @@ while 1:
        else:
            print(r.text)
            r = requests.post(
-               "https://playstrategy.org/api/bot/game/"+gameId+"/move/e7e5",
+               site + "/api/bot/game/"+gameId+"/move/e7e5",
                headers = {"Authorization" : api}
            )
            start = 1
  antihackers_engine.append_to_jornal("Game over")
  antihackers_engine.calls = 0
- myfile = open('playstatus', 'r')
- accept_const = myfile.read()
- myfile.close()
  k = 0
  c2 = 0
