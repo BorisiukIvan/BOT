@@ -9,7 +9,7 @@ site = "https://lichess.org"
 api = "Bearer GrKdhWV5rrYAu0tX"
 
 # Sending our request..
-r = requests.post("https://lidraughts.org/api/bot/account/upgrade", headers = {"Authorization" : api})
+r = requests.post(site + "/api/bot/account/upgrade", headers = {"Authorization" : api})
 
 # Printing result
 print(r.status_code, r.text)
