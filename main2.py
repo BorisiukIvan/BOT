@@ -2,12 +2,11 @@ import time, random, requests, json
 import antihackers_engine
 
 antihackers_engine.calls = 0
-myfile = open('playstatus', 'r')
-accept_const = myfile.read()
-myfile.close()
+accept_const = 1
 antihackers_engine.move = 0
 antihackers_engine.testMove = 0
-api = "Bearer lip_3fkHYSgmvtmvKlc1TTiY"
+your_token = input("Enter token: ")
+api = "Bearer "+your_token
 k = 0
 c2 = 0
 allowed = ['Std']
@@ -138,8 +137,5 @@ while 1:
            start = 1
  antihackers_engine.append_to_jornal("Game over")
  antihackers_engine.calls = 0
- myfile = open('playstatus', 'r')
- accept_const = myfile.read()
- myfile.close()
  k = 0
  c2 = 0
