@@ -348,8 +348,8 @@ def opening(pos):
     global move
     if (move == 0) and (chessmove(pos[52], 52, 44, pos)): return "e2e3"
     if (move == 1) and (chessmove(pos[12], 12, 20, pos)): return "e7e6"
-    if (move == 2) and (chessmove(pos[59], 59, 52, pos)): return "d1e2"
-    if (move == 3) and (chessmove(pos[5], 5, 12, pos)): return "d8e7"
+#    if (move == 2) and (chessmove(pos[59], 59, 52, pos)): return "d1e2"
+#    if (move == 3) and (chessmove(pos[5], 5, 12, pos)): return "d8e7"
     return 0
 
 def isMoveGood(pos, one_const):
@@ -359,9 +359,8 @@ def isMoveGood(pos, one_const):
         if (not pos): return []
 #        if (one_const) and (not start) and (not lastSq):
 #             return "Not my move!!!"
-#        if (move < 4):
-#           our_move = opening(pos)
-#           if (our_move): return our_move
+#        our_move = opening(pos)
+#        if (our_move): return our_move
         minCost = 10
         cheapConst = 0
         spent_time = time.time()
@@ -427,9 +426,9 @@ def FENtranslate(pos, one_const):
         if (not pos): return []
 #        if (one_const) and (not start) and (not lastSq):
 #             return "Not my move!!!"
-#        if (move < 4):
-#           our_move = opening(pos)
-#           if (our_move): return our_move
+        if (move < 4):
+           our_move = opening(pos)
+           if (our_move): return our_move
         minCost = 10
         cheapConst = 0
         spent_time = time.time()
@@ -485,7 +484,7 @@ def FENtranslate(pos, one_const):
                            if ((variants_of_move(pos2)) == 0):
                                if (check_after_move(pos2, 0, 0)):
                                     return convert(s1) + convert(s2)
-                               else: badmoves.append(convert(s1) + convert(s2) + add_something(s1, s2), '100')
+                               else: badmoves.append([convert(s1) + convert(s2) + add_something(s1, s2), '100'])
                            else:
                                p = isMoveGood(pos2, 1)
                                if (p > 0-cheap):
